@@ -22,7 +22,7 @@ function AddIcon() {
   };
   useEffect(() => {
     window.addEventListener("scroll", litenToScroll);
-    return () => window.removeEventListener(litenToScroll);
+    return () => window.removeEventListener("scroll",litenToScroll);
   }, []);
   return (
     <>

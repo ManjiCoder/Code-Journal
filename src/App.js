@@ -9,7 +9,6 @@ import UpdateItem from "./components/pages/UpdateItem";
 import Alert from "./components/Alert";
 import { useAuth0 } from "@auth0/auth0-react";
 import Home from "./components/pages/Home";
-import AddIcon from "./components/AddIcon";
 
 function App() {
   // Scroll To Top on Roucter Change
@@ -89,7 +88,6 @@ function App() {
           }
         />
       </Routes>
-      <AddIcon />
     </UseContext.Provider>
   );
 }

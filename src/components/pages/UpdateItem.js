@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import UseContext from "../context/UseContext";
 import ListBox from "../ListBox";
 
-function UpdateItem({ APIKEY }) {
+function UpdateItem({ APIKEY, alertTodo }) {
   const location = useLocation();
+  const Navigate = useNavigate();
   const { setProgress, selected, setSelected } = useContext(UseContext);
   const {
     ID,
@@ -42,30 +43,35 @@ function UpdateItem({ APIKEY }) {
       8: "eight",
     };
     document.getElementById(numberToWord[level]).checked = true;
-    // document.getElementById('selectedLang').innerText = Lang;
-    // console.log(Lang);
     setSelected(Lang);
     setProgress(100); // eslint-disable-next-line
   }, []);
-  const updateRow = (row) => {
-    fetch(`https://sheetdb.io/api/v1/${APIKEY}/ID/${ID}`, {
+  const updateRow = async (row) => {
+    let res = await fetch(`https://sheetdb.io/api/v1/${APIKEY}/ID/${ID}`, {
       method: "PATCH",
       headers: {
-        Accept: "application/json",
+        "Accept": "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         data: [row],
       }),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+    });
+    console.log(res.ok);
+    alertTodo("Added", res.ok);
+    if (res.ok) {
+      let response = await res.json();
+      console.log(response);
+      Navigate("/");
+    } else {
+      throw Error(res.message);
+    }
   };
   const handleOnSumbit = async (e) => {
     e.preventDefault();
     let row = {
-      ID: { ID },
-      Username: { Username },
+      ID: ID,
+      Username: Username,
       Link: link,
       Title: title,
       Status: status,
@@ -74,7 +80,7 @@ function UpdateItem({ APIKEY }) {
       Time: time,
       Code: code,
       Lang: selected,
-      Date: { Date },
+      Date: Date,
       Score: score,
     };
     console.log(score);
@@ -101,7 +107,7 @@ function UpdateItem({ APIKEY }) {
               type="text"
               name="entry.314843673"
               id="link"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-0 focus:ring-opacity-75 focus:ring-offset-2 focus:ring-offset-blue-500 shadow-md block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               placeholder="Paste the link"
               onChange={(e) => {
                 setLink(e.target.value);
@@ -124,7 +130,7 @@ function UpdateItem({ APIKEY }) {
               name="entry.1254029356"
               id="title"
               placeholder="Enter the title"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-0 focus:ring-opacity-75 focus:ring-offset-2 focus:ring-offset-blue-500 shadow-md block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
@@ -149,7 +155,7 @@ function UpdateItem({ APIKEY }) {
                 className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
               />
               <label
-                htmlFor="done"
+                htmlFor="Done"
                 className="cursor-pointer block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 Done
@@ -168,7 +174,7 @@ function UpdateItem({ APIKEY }) {
                 }}
               />
               <label
-                htmlFor="wrong"
+                htmlFor="Wrong"
                 className="cursor-pointer block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 Wrong
@@ -305,7 +311,7 @@ function UpdateItem({ APIKEY }) {
               name="entry.182705387"
               id="accuracy"
               placeholder="Enter the time like : 10m 11s"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-0 focus:ring-opacity-75 focus:ring-offset-2 focus:ring-offset-blue-500 shadow-md block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               onChange={(e) => {
                 setAccuracy(e.target.value);
               }}
@@ -328,7 +334,7 @@ function UpdateItem({ APIKEY }) {
               name="entry.1772415540"
               id="time"
               placeholder="Enter the time like : 10m 11s"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-0 focus:ring-opacity-75 focus:ring-offset-2 focus:ring-offset-blue-500 shadow-md block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               onChange={(e) => {
                 setTime(e.target.value);
               }}
@@ -348,8 +354,8 @@ function UpdateItem({ APIKEY }) {
               name="entry.1433191799"
               id="code"
               cols="40"
-              rows="7"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              rows="4"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-0 focus:ring-opacity-75 focus:ring-offset-2 focus:ring-offset-blue-500 shadow-md block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               onChange={(e) => setCode(e.target.value)}
               placeholder="Paste the code here!"
               value={code}
@@ -370,7 +376,7 @@ function UpdateItem({ APIKEY }) {
               name="entry.1173418001"
               id="score"
               placeholder="Enter the score"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-0 focus:ring-opacity-75 focus:ring-offset-2 focus:ring-offset-blue-500 shadow-md block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               onChange={(e) => {
                 setScore(e.target.value);
               }}

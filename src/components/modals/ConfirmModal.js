@@ -1,5 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import { useQueryClient } from "react-query";
 
 export default function ConfirmModal({
   closeModal,
@@ -7,6 +8,7 @@ export default function ConfirmModal({
   APIKEY,
   alertTodo,
 }) {
+  const queryClient = useQueryClient()
   // DELETE - REQUEST
   const deleteRow = async (id) => {
     // console.log(id, APIKEY);
@@ -20,9 +22,10 @@ export default function ConfirmModal({
     console.log(res.ok);
     alertTodo("Deleted", res.ok);
     if (res.ok) {
+      document.getElementById(String(id)).style={display:"none"};
       let response = await res.json();
+      queryClient.invalidateQueries('card', { exact: true });
       console.log(response);
-      document.getElementById(id).remove()
     } else {
       throw Error(res.message);
     }

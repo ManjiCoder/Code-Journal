@@ -9,14 +9,14 @@ import { useNavigate } from "react-router-dom";
 function AddItem(props) {
   const { setProgress, selected } = useContext(UseContext);
   const Navigate = useNavigate()
-  const [link, setLink] = useState("jlk");
-  const [title, setTitle] = useState("jlk");
-  const [status, setStatus] = useState("done");
-  const [level, setLevel] = useState("2");
-  const [accuracy, setAccuracy] = useState("5");
-  const [time, setTime] = useState("10m");
+  const [link, setLink] = useState("");
+  const [title, setTitle] = useState("");
+  const [status, setStatus] = useState("");
+  const [level, setLevel] = useState("");
+  const [accuracy, setAccuracy] = useState("");
+  const [time, setTime] = useState("");
   const [code, setCode] = useState("");
-  const [score, setScore] = useState("0");
+  const [score, setScore] = useState("");
   const { isAuthenticated, user } = useAuth0();
 
   useEffect(() => {
@@ -84,7 +84,7 @@ function AddItem(props) {
               type="text"
               name="entry.314843673"
               id="link"
-              className="bg-gray-50 border border-gray-300 dark:border-gray-500 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600  dark:placeholder-gray-400 "
+              className="bg-gray-50 border border-gray-300 dark:border-gray-500 text-gray-900 dark:text-white text-sm rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-0 focus:ring-opacity-75 focus:ring-offset-2 focus:ring-offset-blue-500 shadow-md block w-full p-2.5 dark:bg-gray-600  dark:placeholder-gray-400 "
               placeholder="Paste the link"
               onChange={(e) => {
                 setLink(e.target.value);
@@ -107,7 +107,7 @@ function AddItem(props) {
               name="entry.1254029356"
               id="title"
               placeholder="Enter the title"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-0 focus:ring-opacity-75 focus:ring-offset-2 focus:ring-offset-blue-500 shadow-md block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
@@ -130,6 +130,7 @@ function AddItem(props) {
                   setStatus(e.target.value);
                 }}
                 className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                required
               />
               <label
                 htmlFor="done"
@@ -149,6 +150,7 @@ function AddItem(props) {
                 onChange={(e) => {
                   setStatus(e.target.value);
                 }}
+                required
               />
               <label
                 htmlFor="wrong"
@@ -168,6 +170,7 @@ function AddItem(props) {
                 onChange={(e) => {
                   setStatus(e.target.value);
                 }}
+                required
               />
               <label
                 htmlFor="TLE"
@@ -192,6 +195,7 @@ function AddItem(props) {
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
+                required
               />
               <label
                 htmlFor="zero"
@@ -211,6 +215,7 @@ function AddItem(props) {
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
+                required
               />
               <label
                 htmlFor="one"
@@ -230,6 +235,7 @@ function AddItem(props) {
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
+                required
               />
               <label
                 htmlFor="two"
@@ -248,6 +254,7 @@ function AddItem(props) {
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
+                required
               />
               <label
                 htmlFor="four"
@@ -266,6 +273,7 @@ function AddItem(props) {
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
+                required
               />
               <label
                 htmlFor="eight"
@@ -288,7 +296,7 @@ function AddItem(props) {
               name="entry.182705387"
               id="accuracy"
               placeholder="Enter the number of attempt."
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-0 focus:ring-opacity-75 focus:ring-offset-2 focus:ring-offset-blue-500 shadow-md block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               onChange={(e) => {
                 setAccuracy(e.target.value);
               }}
@@ -310,8 +318,8 @@ function AddItem(props) {
               type="text"
               name="entry.1772415540"
               id="time"
-              placeholder="Enter the time like : 10m 11s"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              placeholder="Enter the time like 10m or 0."
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-0 focus:ring-opacity-75 focus:ring-offset-2 focus:ring-offset-blue-500 shadow-md block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               onChange={(e) => {
                 setTime(e.target.value);
               }}
@@ -334,10 +342,11 @@ function AddItem(props) {
               id="code"
               cols="40"
               rows="4"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              className="shadow-md bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-0 focus:ring-opacity-75 focus:ring-offset-2 focus:ring-offset-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               onChange={(e) => setCode(e.target.value)}
               placeholder="Paste the code here!"
               value={code}
+              required
             ></textarea>
           </div>
           {/* Score */}
@@ -353,7 +362,7 @@ function AddItem(props) {
               name="entry.1173418001"
               id="score"
               placeholder="Enter the score"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-0 focus:ring-opacity-75 focus:ring-offset-2 focus:ring-offset-blue-500 shadow-md block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               onChange={(e) => {
                 setScore(e.target.value);
               }}
