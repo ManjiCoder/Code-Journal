@@ -1,21 +1,20 @@
+import { useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import Heading from "./components/Heading";
 import Navbar from "./components/Navbar";
 import LoadingBar from "react-top-loading-bar";
-import { useEffect, useState } from "react";
-import CardItem from "./components/CardItem";
-import AddItem from "./components/AddItem";
-import BottomNav from "./components/BottomNav";
-import Alert from "./components/Alert";
-import UpdateItem from "./components/UpdateItem";
 import UseContext from "./components/context/UseContext";
-import ScrollToTop from "./components/ScrollToTop";
-// import { useRef } from "react";
+import CardItem from "./components/pages/CardItem";
+import AddItem from "./components/pages/AddItem";
+import UpdateItem from "./components/pages/UpdateItem";
+import Alert from "./components/Alert";
+import { useAuth0 } from "@auth0/auth0-react";
+import Home from "./components/pages/Home";
+import AddIcon from "./components/AddIcon";
 
 function App() {
-
   // Scroll To Top on Roucter Change
   const { pathname } = useLocation();
+  const { isAuthenticated, user } = useAuth0();
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -55,21 +54,28 @@ function App() {
       <Navbar title={title} />
       {/* Top Loading Bar */}
       <LoadingBar
-        // ref={progress}
         color="#f11946"
         height={3.4}
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
       />
-      <Heading title={title} />
       <Alert alert={alert} closeAlert={closeAlert} />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <CardItem APIKEY={APIKEY} title={title} alertTodo={alertTodo} />
-          }
-        />
+        {isAuthenticated ? (
+          <Route
+            path="/"
+            element={
+              <CardItem
+                query={user.nickname}
+                APIKEY={APIKEY}
+                title={title}
+                alertTodo={alertTodo}
+              />
+            }
+          />
+        ) : (
+          <Route path="/" element={<Home title={title} />} />
+        )}
         <Route
           path="/add"
           element={
@@ -83,9 +89,7 @@ function App() {
           }
         />
       </Routes>
-
-      <ScrollToTop />
-      <BottomNav />
+      <AddIcon />
     </UseContext.Provider>
   );
 }

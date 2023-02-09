@@ -1,29 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
-import { useLocation } from "react-router-dom";
-import UseContext from "./context/UseContext";
-function UpdateItem({ APIKEY }) {
-  const location = useLocation();
-  const { setProgress } = useContext(UseContext);
-  const updateData = location.state;
-  console.log(updateData);
-  const [link, setLink] = useState(updateData.Link);
-  const [title, setTitle] = useState(updateData.Title);
-  const [status, setStatus] = useState(updateData.Status);
-  const [level, setLevel] = useState(updateData.Level);
-  const [accuracy, setAccuracy] = useState(updateData.Accuracy);
-  const [time, setTime] = useState(updateData.Time);
-  const [code, setCode] = useState(updateData.Code);
-  const [score, setScore] = useState(updateData.Score);
+import { useAuth0 } from "@auth0/auth0-react";
+import UseContext from "../context/UseContext";
+import ListBox from "../ListBox";
+import { useNavigate } from "react-router-dom";
+
+
+function AddItem(props) {
+  const { setProgress, selected } = useContext(UseContext);
+  const Navigate = useNavigate()
+  const [link, setLink] = useState("jlk");
+  const [title, setTitle] = useState("jlk");
+  const [status, setStatus] = useState("done");
+  const [level, setLevel] = useState("2");
+  const [accuracy, setAccuracy] = useState("5");
+  const [time, setTime] = useState("10m");
+  const [code, setCode] = useState("");
+  const [score, setScore] = useState("0");
+  const { isAuthenticated, user } = useAuth0();
 
   useEffect(() => {
     setProgress(100); // eslint-disable-next-line
   }, []);
 
-  const handleOnSumbit = async (e) => {
+  const addRow = async(row) => {
+    let res = await fetch(`https://sheetdb.io/api/v1/${props.APIKEY}`, {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: [row],
+      }),
+    });
+    console.log(res.ok);
+    props.alertTodo("Added", res.ok);
+    if (res.ok) {
+      let response = await res.json();
+      console.log(response);
+      Navigate('/')
+    } else {
+      throw Error(res.message);
+    }
+  }
+  const HandleOnSumbit = async (e) => {
     e.preventDefault();
     let row = {
-      ID: updateData.ID,
+      ID: "INCREMENT",
+      Username: user.nickname,
       Link: link,
       Title: title,
       Status: status,
@@ -31,31 +56,21 @@ function UpdateItem({ APIKEY }) {
       Accuracy: accuracy,
       Time: time,
       Code: code,
-      Date: updateData.Date,
+      Lang: selected,
+      Date: new Date().getTime(),
       Score: score,
     };
-    console.log(score);
-    console.log(JSON.stringify(row));
+    // console.log(row, isAuthenticated);
 
-    fetch(`https://sheetdb.io/api/v1/${APIKEY}/ID/${updateData.ID}`, {
-      method: "PATCH",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        data: [row],
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+    addRow(row)
   };
+
   return (
     <div className="dark:bg-slate-900 py-4">
-      <div className="w-full mb-7 max-w-sm p-4 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-900 dark:to-slate-700 border border-gray-300 dark:bg-slate-800 rounded-lg shadow-md sm:p-6 md:p-8 dark:border-slate-100 mx-auto">
-        <form className="space-y-6" onSubmit={handleOnSumbit}>
+      <div className="w-full mb-7 max-w-sm p-4 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-900 dark:to-slate-700 border border-gray-300 rounded-lg shadow-md sm:p-6 md:p-8 dark:border-slate-100 mx-auto">
+        <form className="space-y-6" onSubmit={HandleOnSumbit}>
           <h5 className="text-xl font-medium text-gray-900 dark:text-white">
-            Add Data To <b>Code-Journal</b>
+            Add Data To <b>{props.title}</b>
           </h5>
           {/* Link */}
           <div>
@@ -69,7 +84,7 @@ function UpdateItem({ APIKEY }) {
               type="text"
               name="entry.314843673"
               id="link"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              className="bg-gray-50 border border-gray-300 dark:border-gray-500 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600  dark:placeholder-gray-400 "
               placeholder="Paste the link"
               onChange={(e) => {
                 setLink(e.target.value);
@@ -109,13 +124,16 @@ function UpdateItem({ APIKEY }) {
               <input
                 id="done"
                 type="radio"
-                name="entry.584125227"
+                name="status"
                 value="Done"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                onChange={(e) => {
+                  setStatus(e.target.value);
+                }}
+                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
               />
               <label
                 htmlFor="done"
-                className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                className="cursor-pointer block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 Done
               </label>
@@ -125,16 +143,35 @@ function UpdateItem({ APIKEY }) {
               <input
                 id="wrong"
                 type="radio"
-                name="entry.584125227"
+                name="status"
                 value="Wrong"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
                 onChange={(e) => {
                   setStatus(e.target.value);
                 }}
               />
               <label
                 htmlFor="wrong"
-                className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                className="cursor-pointer block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Wrong
+              </label>
+            </div>
+
+            <div className="flex items-center pl-5 mb-4">
+              <input
+                id="TLE"
+                type="radio"
+                name="status"
+                value="TLE"
+                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                onChange={(e) => {
+                  setStatus(e.target.value);
+                }}
+              />
+              <label
+                htmlFor="TLE"
+                className="cursor-pointer block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 TimeOut
               </label>
@@ -149,16 +186,16 @@ function UpdateItem({ APIKEY }) {
               <input
                 id="zero"
                 type="radio"
-                name="entry.813669578"
+                name="level"
                 value="0"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
               />
               <label
                 htmlFor="zero"
-                className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                className="cursor-pointer block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 0
               </label>
@@ -168,16 +205,16 @@ function UpdateItem({ APIKEY }) {
               <input
                 id="one"
                 type="radio"
-                name="entry.813669578"
+                name="level"
                 value="1"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
               />
               <label
                 htmlFor="one"
-                className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                className="cursor-pointer block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 1
               </label>
@@ -187,16 +224,16 @@ function UpdateItem({ APIKEY }) {
               <input
                 id="two"
                 type="radio"
-                name="entry.813669578"
+                name="level"
                 value="2"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
               />
               <label
                 htmlFor="two"
-                className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                className="cursor-pointer block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 2
               </label>
@@ -205,16 +242,16 @@ function UpdateItem({ APIKEY }) {
               <input
                 id="four"
                 type="radio"
-                name="entry.813669578"
+                name="level"
                 value="4"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
               />
               <label
                 htmlFor="four"
-                className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                className="cursor-pointer block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 4
               </label>
@@ -223,16 +260,16 @@ function UpdateItem({ APIKEY }) {
               <input
                 id="eight"
                 type="radio"
-                name="entry.813669578"
+                name="level"
                 value="8"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
               />
               <label
                 htmlFor="eight"
-                className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                className="cursor-pointer block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 8
               </label>
@@ -244,13 +281,13 @@ function UpdateItem({ APIKEY }) {
               htmlFor="accuracy"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Accuracy
+              Attempt
             </label>
             <input
               type="number"
               name="entry.182705387"
               id="accuracy"
-              placeholder="Enter the time like : 10m 11s"
+              placeholder="Enter the number of attempt."
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               onChange={(e) => {
                 setAccuracy(e.target.value);
@@ -282,10 +319,12 @@ function UpdateItem({ APIKEY }) {
               value={time}
             />
           </div>
+          {/* Lang */}
+          <ListBox />
           {/* Code */}
           <div>
             <label
-              htmlFor="time"
+              htmlFor="code"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Code
@@ -294,7 +333,7 @@ function UpdateItem({ APIKEY }) {
               name="entry.1433191799"
               id="code"
               cols="40"
-              rows="7"
+              rows="4"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               onChange={(e) => setCode(e.target.value)}
               placeholder="Paste the code here!"
@@ -324,9 +363,10 @@ function UpdateItem({ APIKEY }) {
           </div>
           <button
             type="submit"
-            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
+            disabled={!isAuthenticated}
           >
-            Update
+            Submit
           </button>
         </form>
       </div>
@@ -334,4 +374,4 @@ function UpdateItem({ APIKEY }) {
   );
 }
 
-export default UpdateItem;
+export default AddItem;
