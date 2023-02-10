@@ -9,6 +9,7 @@ import UpdateItem from "./components/pages/UpdateItem";
 import Alert from "./components/Alert";
 import { useAuth0 } from "@auth0/auth0-react";
 import Home from "./components/pages/Home";
+import Footer from "./components/Footer";
 
 function App() {
   // Scroll To Top on Roucter Change
@@ -73,7 +74,7 @@ function App() {
             }
           />
         ) : (
-          <Route path="/" element={<Home title={title} />} />
+          <Route path="*" element={<Home title={title} />} />
         )}
         <Route
           path="/add"
@@ -88,6 +89,7 @@ function App() {
           }
         />
       </Routes>
+      <Footer title={title} />
     </UseContext.Provider>
   );
 }

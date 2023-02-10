@@ -23,7 +23,6 @@ function UpdateItem({ APIKEY, alertTodo }) {
     Score,
     TotalResults,
   } = location.state;
-  console.log(location.state);
   const [link, setLink] = useState(Link);
   const [title, setTitle] = useState(Title);
   const [status, setStatus] = useState(Status);
@@ -152,7 +151,7 @@ function UpdateItem({ APIKEY, alertTodo }) {
                 onChange={(e) => {
                   setStatus(e.target.value);
                 }}
-                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4"
               />
               <label
                 htmlFor="Done"
@@ -168,7 +167,7 @@ function UpdateItem({ APIKEY, alertTodo }) {
                 type="radio"
                 name="status"
                 value="Wrong"
-                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4"
                 onChange={(e) => {
                   setStatus(e.target.value);
                 }}
@@ -187,7 +186,7 @@ function UpdateItem({ APIKEY, alertTodo }) {
                 type="radio"
                 name="status"
                 value="TLE"
-                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4"
                 onChange={(e) => {
                   setStatus(e.target.value);
                 }}
@@ -211,7 +210,7 @@ function UpdateItem({ APIKEY, alertTodo }) {
                 type="radio"
                 name="entry.813669578"
                 value="0"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="w-4 h-4"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
@@ -230,7 +229,7 @@ function UpdateItem({ APIKEY, alertTodo }) {
                 type="radio"
                 name="entry.813669578"
                 value="1"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="w-4 h-4"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
@@ -249,7 +248,7 @@ function UpdateItem({ APIKEY, alertTodo }) {
                 type="radio"
                 name="entry.813669578"
                 value="2"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="w-4 h-4"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
@@ -267,7 +266,7 @@ function UpdateItem({ APIKEY, alertTodo }) {
                 type="radio"
                 name="entry.813669578"
                 value="4"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="w-4 h-4"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
@@ -285,7 +284,7 @@ function UpdateItem({ APIKEY, alertTodo }) {
                 type="radio"
                 name="entry.813669578"
                 value="8"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="w-4 h-4"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}

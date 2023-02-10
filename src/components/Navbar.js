@@ -2,15 +2,8 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 // import Logo from "../components/img/logo.png";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-
-const navigation = [
-  { name: "Home", href: "/", current: false },
-  { name: "Add", href: "/add", current: false },
-  { name: "About", href: "#", current: false },
-  { name: "Contact", href: "#", current: false },
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -18,6 +11,17 @@ function classNames(...classes) {
 
 export default function Example() {
   const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
+  const { pathname } = useLocation();
+  const navigation = [
+    { name: "Home", href: "/", current: pathname === "/" ? true : false },
+    { name: "Add", href: "/add", current: pathname === "/add" ? true : false },
+    { name: "About", href: "#", current: pathname === "/about" ? true : false },
+    {
+      name: "Contact",
+      href: "#",
+      current: pathname === "/contact" ? true : false,
+    },
+  ];
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -38,16 +42,8 @@ export default function Example() {
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 {/* Logo */}
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="block h-8 w-auto lg:hidden"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=red&shade=500"
-                    alt="Your Company"
-                  />
-                  <img
-                    className="hidden h-8 w-auto lg:block"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
+                  <span className="font-bold text-white" style={{textShadow:'1px 1px pink'}}>Coding-</span>
+                  <span className="font-bold text-[gold]" style={{textShadow:'0.4px 0.4px white'}}>Journal</span>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
@@ -114,15 +110,12 @@ export default function Example() {
                           </Menu.Item>
                           <Menu.Item>
                             <Link
+                            to={'/login'}
                               className={classNames(
                                 "hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700"
                               )}
                               onClick={() =>
-                                logout({
-                                  logoutParams: {
-                                    returnTo: window.location.origin,
-                                  },
-                                })
+                                logout()
                               }
                             >
                               Sign out

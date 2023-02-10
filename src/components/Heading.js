@@ -21,7 +21,7 @@ function Heading({ title }) {
       <div className="text-lg font-normal text-gray-600 lg:text-xl dark:text-gray-400">
         <b>{title}</b> is a website made for <b>Coder</b> who are solving
         question on coding platfrom like.
-        <ul className="px-5 mt-2">
+        <ul className="px-5 mt-2 list-disc text-indigo-500" >
           {codingPlatfroms.map((item) => {
             return (
               <li key={item}>

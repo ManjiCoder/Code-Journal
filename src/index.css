@@ -1,9 +1,12 @@
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
-
+@import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Rubik+80s+Fade&display=swap');
 @tailwind base;
 @tailwind components;
 body{
     scroll-behavior: smooth;
+    font-family: 'Julius Sans One', sans-serif;
+}
+.Logo-Text{
+    /* font-family: 'Rubik 80s Fade', cursive; */
 }
 #slider-line{
     position: absolute;

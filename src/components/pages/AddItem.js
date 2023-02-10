@@ -5,10 +5,9 @@ import UseContext from "../context/UseContext";
 import ListBox from "../ListBox";
 import { useNavigate } from "react-router-dom";
 
-
 function AddItem(props) {
   const { setProgress, selected } = useContext(UseContext);
-  const Navigate = useNavigate()
+  const Navigate = useNavigate();
   const [link, setLink] = useState("");
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("");
@@ -23,7 +22,7 @@ function AddItem(props) {
     setProgress(100); // eslint-disable-next-line
   }, []);
 
-  const addRow = async(row) => {
+  const addRow = async (row) => {
     let res = await fetch(`https://sheetdb.io/api/v1/${props.APIKEY}`, {
       method: "POST",
       headers: {
@@ -39,11 +38,11 @@ function AddItem(props) {
     if (res.ok) {
       let response = await res.json();
       console.log(response);
-      Navigate('/')
+      Navigate("/");
     } else {
       throw Error(res.message);
     }
-  }
+  };
   const HandleOnSumbit = async (e) => {
     e.preventDefault();
     let row = {
@@ -62,7 +61,7 @@ function AddItem(props) {
     };
     // console.log(row, isAuthenticated);
 
-    addRow(row)
+    addRow(row);
   };
 
   return (
@@ -129,7 +128,7 @@ function AddItem(props) {
                 onChange={(e) => {
                   setStatus(e.target.value);
                 }}
-                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4"
                 required
               />
               <label
@@ -146,7 +145,7 @@ function AddItem(props) {
                 type="radio"
                 name="status"
                 value="Wrong"
-                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4"
                 onChange={(e) => {
                   setStatus(e.target.value);
                 }}
@@ -166,7 +165,7 @@ function AddItem(props) {
                 type="radio"
                 name="status"
                 value="TLE"
-                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4"
                 onChange={(e) => {
                   setStatus(e.target.value);
                 }}
@@ -191,7 +190,7 @@ function AddItem(props) {
                 type="radio"
                 name="level"
                 value="0"
-                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
@@ -211,7 +210,7 @@ function AddItem(props) {
                 type="radio"
                 name="level"
                 value="1"
-                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4 "
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
@@ -231,7 +230,7 @@ function AddItem(props) {
                 type="radio"
                 name="level"
                 value="2"
-                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
@@ -250,7 +249,7 @@ function AddItem(props) {
                 type="radio"
                 name="level"
                 value="4"
-                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
@@ -269,7 +268,7 @@ function AddItem(props) {
                 type="radio"
                 name="level"
                 value="8"
-                className="cursor-pointer w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                className="cursor-pointer w-4 h-4"
                 onChange={(e) => {
                   setLevel(e.target.value);
                 }}
